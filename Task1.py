@@ -13,27 +13,24 @@ def speech():
         try:
             print("Recognizing....")
             data = input.recognize_google(audio)
-            print("You Said: ",data.capitalize())
+            print("You Said: ", data.capitalize())
             return data.lower()
         except sr.UnknownValueError:
             print("I can't understand that")
             return None
 
-
 def txtspeech(x):
     engine = pyt.init()
     voices = engine.getProperty('voices')
-    engine.setProperty('voice',voices[1].id)
-    rate = engine.getProperty('rate')
-    engine.setProperty('rate',150)
+    engine.setProperty('voice', voices[1].id)  # Female voice
+    engine.setProperty('rate', 150)
     engine.say(x)
     engine.runAndWait()
 
 def process_command(command):
     if "hello" in command:
-
         txtspeech("Hello! How can I help you?")
-    
+
     elif "time" in command:
         current_time = datetime.datetime.now().strftime("%H:%M")
         txtspeech(f"The time is {current_time}")
@@ -68,14 +65,16 @@ def process_command(command):
         exit()
 
     else:
-        print("Please repeat")
-
+        txtspeech("Sorry, I didn't understand. Please try again.")
 
 def main():
-    txtspeech("Hello! I am Jarvis. How can I assist you?")
+    txtspeech("Hello! I am Jarvis. Press Enter to speak.")
     while True:
-        command = speech() 
+        user_input = input("\nPress Enter to give a voice command ")
+
+        command = speech()
         if command:
-            process_command(command) 
+            process_command(command)
+
 if __name__ == "__main__":
     main()
